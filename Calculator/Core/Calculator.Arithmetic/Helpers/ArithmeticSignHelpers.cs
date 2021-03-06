@@ -25,5 +25,45 @@ namespace Calculator.Arithmetic.Helpers
 
             throw new NullReferenceException("The sign has no ArithmeticSign attribute");
         }
+
+        public static bool EqualsSign(this ArithmeticSign enumElement, char symbol)
+        {
+            return symbol.Equals(enumElement.GetSign());
+        }
+
+        public static bool IsArithmeticSign(char symbol)
+        {
+            if (ArithmeticSign.Sub.EqualsSign(symbol)
+                || ArithmeticSign.Sum.EqualsSign(symbol)
+                || ArithmeticSign.Mul.EqualsSign(symbol)
+                || ArithmeticSign.Del.EqualsSign(symbol))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static ArithmeticSign GetArithmeticSignType(char symbol)
+        {
+            if (ArithmeticSign.Sub.EqualsSign(symbol))
+            {
+                return ArithmeticSign.Sub;
+            }
+            else if (ArithmeticSign.Sum.EqualsSign(symbol))
+            {
+                return ArithmeticSign.Sum;
+            }
+            else if (ArithmeticSign.Mul.EqualsSign(symbol))
+            {
+                return ArithmeticSign.Mul;
+            }
+            else if (ArithmeticSign.Del.EqualsSign(symbol))
+            {
+                return ArithmeticSign.Del;
+            }
+
+            throw new ArgumentException($"The symbol \'{symbol}\' not recognized");
+        }
     }
 }
