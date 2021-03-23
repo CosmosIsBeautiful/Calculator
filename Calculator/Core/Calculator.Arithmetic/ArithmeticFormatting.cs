@@ -4,7 +4,6 @@ using Calculator.Arithmetic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Calculator.Arithmetic
 {
@@ -31,7 +30,6 @@ namespace Calculator.Arithmetic
             for (int i = 0; i < str.Length; i++)
             {
                 if (ArithmeticSignHelpers.IsArithmeticSign(str[i]) || str[i].Equals('(') || str[i].Equals(')'))
-
                 {
                     if (str[i].Equals('('))
                     {
@@ -52,7 +50,6 @@ namespace Calculator.Arithmetic
                         isNumber = true;
                     }
 
-
                     if (isNumber)
                     {
                         var numberTerm = CreateNumberTerm(str, i, startNumber, sign);
@@ -63,40 +60,15 @@ namespace Calculator.Arithmetic
                         }
                         else if (inner == 1)
                         {
-                            ExpressionTerm innerExpression;
-                            if (expression?.Any() == true && expression.Last() is ExpressionTerm)
-                            {
-                                innerExpression = expression.Last() as ExpressionTerm;
-                            }
-                            else
-                            {
-                                innerExpression = new ExpressionTerm(signExpression);
-                                expression.Add(innerExpression);
-                            }
+                            ExpressionTerm innerExpression = GetOrCreateFirstInnerExpression(expression, signExpression);
 
                             innerExpression.Expression.Add(numberTerm);
                         }
                         else if (inner > 1)
                         {
-                            IList<ITerm> innerExpression = ((ExpressionTerm)expression.Last()).Expression;
-
-                            for (int j = 1; j < inner; j++)
-                            {
-                                if (innerExpression.Last() is ExpressionTerm)
-                                {
-                                    innerExpression = ((ExpressionTerm)innerExpression.Last()).Expression;
-                                }
-                                else
-                                {
-                                    var qweExpression = new ExpressionTerm(signExpression);
-                                    innerExpression.Add(qweExpression);
-
-                                    innerExpression = qweExpression.Expression;
-                                }
-                            }
+                            IList<ITerm> innerExpression = GetOrCreateSubsequentInnerExpression(expression, inner, signExpression);
 
                             innerExpression.Add(numberTerm);
-
                         }
 
                         if (str[i].Equals(')'))
@@ -127,14 +99,6 @@ namespace Calculator.Arithmetic
             return expression;
         }
 
-        private NumberTerm CreateNumberTerm(string str, int i, int startIndexNumber, ArithmeticSign sign)
-        {
-            string stringNumber = str.Substring(startIndexNumber, i - startIndexNumber);
-            int number = Int32.Parse(stringNumber);
-
-            return new NumberTerm(number, sign);
-        }
-
         private string AddSignIfMissing(string str)
         {
             if (ArithmeticSignHelpers.IsArithmeticSign(str[0]) == false)
@@ -143,6 +107,53 @@ namespace Calculator.Arithmetic
             }
 
             return str;
+        }
+
+        private NumberTerm CreateNumberTerm(string str, int i, int startIndexNumber, ArithmeticSign sign)
+        {
+            string stringNumber = str.Substring(startIndexNumber, i - startIndexNumber);
+            int number = Int32.Parse(stringNumber);
+
+            return new NumberTerm(number, sign);
+        }
+
+
+        private ExpressionTerm GetOrCreateFirstInnerExpression(List<ITerm> expression, ArithmeticSign signExpression)
+        {
+            ExpressionTerm innerExpression;
+            if (expression?.Any() == true && expression.Last() is ExpressionTerm expressionLast)
+            {
+                innerExpression = expressionLast;
+            }
+            else
+            {
+                innerExpression = new ExpressionTerm(signExpression);
+                expression.Add(innerExpression);
+            }
+
+            return innerExpression;
+        }
+
+        private IList<ITerm> GetOrCreateSubsequentInnerExpression(List<ITerm> expression, int inner, ArithmeticSign signExpression)
+        {
+            IList<ITerm> innerExpression = ((ExpressionTerm)expression.Last()).Expression;
+
+            for (int j = 1; j < inner; j++)
+            {
+                if (innerExpression.Last() is ExpressionTerm expressionLast)
+                {
+                    innerExpression = expressionLast.Expression;
+                }
+                else
+                {
+                    var newExpression = new ExpressionTerm(signExpression);
+                    innerExpression.Add(newExpression);
+
+                    innerExpression = newExpression.Expression;
+                }
+            }
+
+            return innerExpression;
         }
     }
 }

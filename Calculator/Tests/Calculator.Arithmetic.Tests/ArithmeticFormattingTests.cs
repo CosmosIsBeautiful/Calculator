@@ -15,11 +15,9 @@ namespace Calculator.Arithmetic.Tests
             Formatting = new ArithmeticFormatting();
         }
 
-        [TestMethod]
-        public void GetParsedExpression_CorrectlyParsingExpression()
+        public Dictionary<string, List<ITerm>> CreateExpressionDictionary()
         {
-            //act
-            Dictionary<string, List<ITerm>> data = new Dictionary<string, List<ITerm>>
+            Dictionary<string, List<ITerm>> expressions = new Dictionary<string, List<ITerm>>
             {
                  { "+8+(+7/(+1+3)-5)-9",
                     new List<ITerm>
@@ -153,7 +151,16 @@ namespace Calculator.Arithmetic.Tests
                 //{ "-54/87+78*15", new List<NumberTerm>  { new NumberTerm('-', 54), new NumberTerm('/', 87), new NumberTerm('+', 78), new NumberTerm('*', 15) } }
             };
 
-            foreach (var item in data)
+            return expressions;
+        }
+
+        [TestMethod]
+        public void GetParsedExpression_CorrectlyParsingExpression()
+        {
+            //act
+            Dictionary<string, List<ITerm>> expressions = CreateExpressionDictionary();
+
+            foreach (var item in expressions)
             {
                 //arrange
                 var actual = Formatting.GetParsedExpression(item.Key);
