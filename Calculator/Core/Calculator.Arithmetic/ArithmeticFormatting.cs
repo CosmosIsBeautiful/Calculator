@@ -4,12 +4,15 @@ using Calculator.Arithmetic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Calculator.Arithmetic
 {
     public interface IFormatting
     {
+        string GetNormalizationExpressionString(string equation);
+
         bool IsValidExpression(string equation);
 
         List<ITerm> GetParsedExpression(string str);
@@ -17,6 +20,37 @@ namespace Calculator.Arithmetic
 
     public class ArithmeticFormatting: IFormatting
     {
+        public string GetNormalizationExpressionString(string equationString)
+        {
+            var withoutSpacesEquation = equationString.Replace(" ", string.Empty);
+            StringBuilder str = new StringBuilder(withoutSpacesEquation);
+
+            if (ArithmeticSignHelpers.IsArithmeticSign(str[0]) == false)
+            {
+                str = str.Insert(0, '+');
+            }
+
+            for (int i = 1; i < str.Length; i++)
+            {
+                if (str[i].Equals('('))
+                {
+                    if (ArithmeticSignHelpers.IsArithmeticSign(str[i - 1]) == false)
+                    {
+                        str = str.Insert(i, '+');
+                        continue;
+                    }
+
+                    if (ArithmeticSignHelpers.IsArithmeticSign(str[i + 1]) == false)
+                    {
+                        str = str.Insert(i + 1, '+');
+                        continue;
+                    }
+                }
+            }
+                
+            return str.ToString();
+        }
+
         public bool IsValidExpression(string equation)
         {
             Regex rgx = new Regex(@"^(([\+\-\*\/][(])*[\+\-\*\/][-]?\d+[,]?\d*[)]*)+$");

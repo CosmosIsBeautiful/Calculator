@@ -193,11 +193,11 @@ namespace Calculator.Arithmetic.Tests
         [DataRow("+33/-5", true)]
         [DataRow("+70/-1,4", true)]
         [DataRow("+985/5000", true)]
-        [DataRow("+(+2)+-2", true)]
-        [DataRow("+(+(+2-1)+-2)", true)]
+        [DataRow("+(+2)/-2", true)]
+        [DataRow("+(+(+2-1)-2)", true)]
         [DataRow("+(+7/1+(+2-1))", true)]
         [DataRow("+(+2+2)", true)]
-        [DataRow("+(+5*4)*65", true)]
+        [DataRow("+(+5*4)*-65", true)]
         [DataRow("+(+(+2+2)+6)", true)]
         [DataRow("+(+1*2)/(+12/6)", true)]
         [DataRow("+(+5+(+2+2)-5)", true)]
@@ -206,7 +206,7 @@ namespace Calculator.Arithmetic.Tests
         [DataRow("+42+18/(+6+12/-4)", true)]
         [DataRow("+12/6+10,34-(+5*(+6+2))+2,7", true)]
         [DataRow("-10+9*8/-4*60-90/-2*(-4/2)+(+55+9*6)+100", true)]
-        [DataRow("+(+100/5+6*2+(+44-22/10))+(+84*56/(+12/6)+90-(+-5*5-1))", true)]
+        [DataRow("+(+100/5+6*2+(+44-22/-10))+(+84*56/(+12/6)+90-(-5*-5-1))", true)]
         public void IsValidExpression_ValidExpressions(string str, bool isValidExpected)
         {
             //arrange
@@ -234,6 +234,23 @@ namespace Calculator.Arithmetic.Tests
 
             //assert
             Assert.AreEqual(isValidExpected, isValidActual, $"Expression: {str}. Actual: {isValidActual} != Expected: {isValidExpected}");
+        }
+
+        [DataTestMethod]
+        [DataRow("+ 2 + 2 ", "+2+2")]
+        [DataRow(" 5 + 5 ", "+5+5")]
+        [DataRow("+4 (+4 + 4 )", "+4+(+4+4)")]
+        [DataRow("-1 (+14 + 45 )", "-1+(+14+45)")]
+        [DataRow("  1 (  14 + 45 )", "+1+(+14+45)")]
+        [DataRow("  9 (  9 + 9 ) + 9", "+9+(+9+9)+9")]
+        public void GetNormalizationExpressionString_CorrectNormalization(string str, string expectedEquation)
+        {
+            //arrange
+            var actualEquation = Formatting.GetNormalizationExpressionString(str);
+
+            //assert
+            Assert.AreEqual(expectedEquation, actualEquation, $"Actual: {actualEquation} != Expected: {expectedEquation}");
+
         }
     }
 }

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculator", "Calculator\Calculator.csproj", "{75F3787A-53C0-4BE2-A74F-335F0C712B7B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A8DA9332-4033-4A09-AE9E-63DBFD31FC7A} = {A8DA9332-4033-4A09-AE9E-63DBFD31FC7A}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{BD4CEAC9-8B95-4C77-84E0-F5D7C3234F9F}"
 EndProject
@@ -17,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculator.Arithmetic", "Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DFDEAD8A-0C53-4FCA-B775-CA1969171252}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calculator.Arithmetic.Tests", "Tests\Calculator.Arithmetic.Tests\Calculator.Arithmetic.Tests.csproj", "{EE45CBDF-7B3D-4E25-9274-693FDE39AC44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Calculator.Arithmetic.Tests", "Tests\Calculator.Arithmetic.Tests\Calculator.Arithmetic.Tests.csproj", "{EE45CBDF-7B3D-4E25-9274-693FDE39AC44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

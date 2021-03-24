@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core\Calculator.Arithmetic\Calculator.Arithmetic.csproj" />
     <ProjectReference Include="..\IO\Calculator.Input\Calculator.Input.csproj" />
     <ProjectReference Include="..\IO\Calculator.Output\Calculator.Output.csproj" />
   </ItemGroup>
