@@ -9,21 +9,14 @@ namespace Calculator.Arithmetic.Helpers
     {
         public static char GetSign(this ArithmeticSign enumElement)
         {
-            Type type = enumElement.GetType();
-            MemberInfo[] memInfo = type.GetMember(enumElement.ToString());
+            ArithmeticSignAttribute arithmeticSign = GetArithmeticSignAttribute(enumElement);
+            return arithmeticSign.Sign;
+        }
 
-            if (memInfo.Length > 0)
-            {
-                object[] attrs = memInfo[0].GetCustomAttributes(typeof(ArithmeticSignAttribute), false);
-
-                if (attrs.Length > 0)
-                {
-                    char sign = ((ArithmeticSignAttribute)attrs[0]).Sign;
-                    return sign;
-                }
-            }
-
-            throw new NullReferenceException("The sign has no ArithmeticSign attribute");
+        public static int GetPriority(this ArithmeticSign enumElement)
+        {
+            ArithmeticSignAttribute arithmeticSign = GetArithmeticSignAttribute(enumElement);
+            return arithmeticSign.Priority;
         }
 
         public static bool EqualsSign(this ArithmeticSign enumElement, char symbol)
@@ -64,6 +57,24 @@ namespace Calculator.Arithmetic.Helpers
             }
 
             throw new ArgumentException($"The symbol \'{symbol}\' not recognized");
+        }
+
+        private static ArithmeticSignAttribute GetArithmeticSignAttribute(this ArithmeticSign enumElement)
+        {
+            Type type = enumElement.GetType();
+            MemberInfo[] memInfo = type.GetMember(enumElement.ToString());
+
+            if (memInfo.Length > 0)
+            {
+                object[] attrs = memInfo[0].GetCustomAttributes(typeof(ArithmeticSignAttribute), false);
+
+                if (attrs.Length > 0)
+                {
+                    return attrs[0] as ArithmeticSignAttribute;
+                }
+            }
+
+            throw new NullReferenceException("The sign has no ArithmeticSign attribute");
         }
     }
 }

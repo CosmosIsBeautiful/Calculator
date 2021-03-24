@@ -7,9 +7,12 @@ namespace Calculator.Arithmetic.Attributes
     {
         public readonly char Sign;
 
-        public ArithmeticSignAttribute(char sign)
+        public readonly int Priority;
+
+        public ArithmeticSignAttribute(char sign, int priority)
         {
             this.Sign = sign;
+            this.Priority = priority;
         }
     }
 }

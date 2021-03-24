@@ -4,16 +4,16 @@ namespace Calculator.Arithmetic.Enums
 {
     public enum ArithmeticSign
     {
-        [ArithmeticSign('*')]
+        [ArithmeticSign('*', priority: 1000)]
         Mul = 1,
 
-        [ArithmeticSign('/')]
+        [ArithmeticSign('/', priority: 1000)]
         Del,
 
-        [ArithmeticSign('+')]
+        [ArithmeticSign('+', priority: 900)]
         Sum,
 
-        [ArithmeticSign('-')]
+        [ArithmeticSign('-', priority: 900)]
         Sub,
     }
 }
