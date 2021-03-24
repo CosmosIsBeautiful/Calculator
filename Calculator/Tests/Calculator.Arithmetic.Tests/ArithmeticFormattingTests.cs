@@ -187,5 +187,53 @@ namespace Calculator.Arithmetic.Tests
 
             return flag;
         }
+
+        [DataTestMethod]
+        [DataRow("+2+2", true)]
+        [DataRow("+33/-5", true)]
+        [DataRow("+70/-1,4", true)]
+        [DataRow("+985/5000", true)]
+        [DataRow("+(+2)+-2", true)]
+        [DataRow("+(+(+2-1)+-2)", true)]
+        [DataRow("+(+7/1+(+2-1))", true)]
+        [DataRow("+(+2+2)", true)]
+        [DataRow("+(+5*4)*65", true)]
+        [DataRow("+(+(+2+2)+6)", true)]
+        [DataRow("+(+1*2)/(+12/6)", true)]
+        [DataRow("+(+5+(+2+2)-5)", true)]
+        [DataRow("+(-2+2)-(+(+0+6))", true)]
+        [DataRow("+8+(+7/(+1+3)-5)-9", true)]
+        [DataRow("+42+18/(+6+12/-4)", true)]
+        [DataRow("+12/6+10,34-(+5*(+6+2))+2,7", true)]
+        [DataRow("-10+9*8/-4*60-90/-2*(-4/2)+(+55+9*6)+100", true)]
+        [DataRow("+(+100/5+6*2+(+44-22/10))+(+84*56/(+12/6)+90-(+-5*5-1))", true)]
+        public void IsValidExpression_ValidExpressions(string str, bool isValidExpected)
+        {
+            //arrange
+            var isValidActual = Formatting.IsValidExpression(str);
+
+            //assert
+            Assert.AreEqual(isValidExpected, isValidActual, $"Expression: {str}. Actual: {isValidActual} != Expected: {isValidExpected}");
+        }
+
+        [DataTestMethod]
+        [DataRow("2+2", false)]
+        [DataRow(" 2 + 2", false)]
+        [DataRow("+70/- 1,4", false)]
+        [DataRow("(+2)-2", false)]
+        [DataRow("+(+(+5)-5", false)]
+        [DataRow("+(+5)-5)", false)]
+        [DataRow("+(+(2-1)+-2)", false)]
+        [DataRow("(7/1+(2-1))", false)]
+        [DataRow("+( +7 / 1 + ( +2 - 1 ) )", false)]
+        [DataRow("+(+5*(+9-(+15-(+20+20)-5)", false)]
+        public void IsValidExpression_InvalidExpressions(string str, bool isValidExpected)
+        {
+            //arrange
+            var isValidActual = Formatting.IsValidExpression(str);
+
+            //assert
+            Assert.AreEqual(isValidExpected, isValidActual, $"Expression: {str}. Actual: {isValidActual} != Expected: {isValidExpected}");
+        }
     }
 }

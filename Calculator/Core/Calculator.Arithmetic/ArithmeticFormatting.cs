@@ -4,16 +4,29 @@ using Calculator.Arithmetic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Calculator.Arithmetic
 {
     public interface IFormatting
     {
+        bool IsValidExpression(string equation);
+
         List<ITerm> GetParsedExpression(string str);
     }
 
     public class ArithmeticFormatting: IFormatting
     {
+        public bool IsValidExpression(string equation)
+        {
+            Regex rgx = new Regex(@"^(([\+\-\*\/][(])*[\+\-\*\/][-]?\d+[,]?\d*[)]*)+$");
+            bool isRgxValid = rgx.IsMatch(equation);
+
+            bool isBracketsValid = IsBracketsValidExpression(equation);
+
+            return (isRgxValid && isBracketsValid);
+        }
+
         public List<ITerm> GetParsedExpression(string str)
         {
             str = AddSignIfMissing(str);
@@ -117,7 +130,6 @@ namespace Calculator.Arithmetic
             return new NumberTerm(number, sign);
         }
 
-
         private ExpressionTerm GetOrCreateFirstInnerExpression(List<ITerm> expression, ArithmeticSign signExpression)
         {
             ExpressionTerm innerExpression;
@@ -154,6 +166,25 @@ namespace Calculator.Arithmetic
             }
 
             return innerExpression;
+        }
+
+        private bool IsBracketsValidExpression(string equation)
+        {
+            int countBrackets = 0;
+            for (int i = 0; i < equation.Length; i++)
+            {
+                if (equation[i] == '(')
+                {
+                    countBrackets++;
+                }
+
+                if (equation[i] == ')')
+                {
+                    countBrackets--;
+                }
+            }
+
+            return (countBrackets == 0);
         }
     }
 }
