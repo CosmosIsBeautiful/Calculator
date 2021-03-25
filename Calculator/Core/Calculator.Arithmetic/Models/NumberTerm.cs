@@ -8,9 +8,9 @@ namespace Calculator.Arithmetic.Models
     {
         public ArithmeticSign Sign { get; set; }
 
-        public int Digit { get; set; }
+        public double Digit { get; set; }
 
-        public NumberTerm(ArithmeticSign sign, int digit)
+        public NumberTerm(ArithmeticSign sign, double digit)
         {
             this.Sign = sign;
             this.Digit = digit;
@@ -21,7 +21,7 @@ namespace Calculator.Arithmetic.Models
             this.Digit = digit;
             this.Sign = sign;
         }
-        public NumberTerm(char sign, int digit)
+        public NumberTerm(char sign, double digit)
         {
             this.Digit = digit;
             this.Sign = ArithmeticSignHelpers.GetArithmeticSignType(sign);
