@@ -23,32 +23,39 @@ namespace Calculator.Arithmetic
         public string GetNormalizationExpressionString(string equationString)
         {
             var withoutSpacesEquation = equationString.Replace(" ", string.Empty);
-            StringBuilder str = new StringBuilder(withoutSpacesEquation);
+            StringBuilder equation = new StringBuilder(withoutSpacesEquation);
 
-            if (ArithmeticSignHelpers.IsArithmeticSign(str[0]) == false)
-            {
-                str = str.Insert(0, '+');
-            }
+            int index = 0;
+            equation = GetRepairedEquation(equation, ref index, 0);
 
-            for (int i = 1; i < str.Length; i++)
+            for (int i = 1; i < equation.Length; i++)
             {
-                if (str[i].Equals('('))
+                if (equation[i].Equals('('))
                 {
-                    if (ArithmeticSignHelpers.IsArithmeticSign(str[i - 1]) == false)
-                    {
-                        str = str.Insert(i, '+');
-                        continue;
-                    }
+                    equation = GetRepairedEquation(equation, ref i, +1);
 
-                    if (ArithmeticSignHelpers.IsArithmeticSign(str[i + 1]) == false)
-                    {
-                        str = str.Insert(i + 1, '+');
-                        continue;
-                    }
+                    equation = GetRepairedEquation(equation, ref i, -1);
                 }
             }
-                
-            return str.ToString();
+
+            return equation.ToString();
+        }
+
+        private StringBuilder GetRepairedEquation(StringBuilder equation, ref int i, int step)
+        {
+            int index = i + step;
+            if (equation[index].IsArithmeticSign() == false)
+            {
+                i--;
+                return equation.Insert(index, '+');
+            }
+            else if (equation[index].IsNegativeNumber())
+            {
+                i--;
+                return equation.Insert(index, '+');
+            }
+
+            return equation;
         }
 
         public bool IsValidExpression(string equation)

@@ -239,8 +239,10 @@ namespace Calculator.Arithmetic.Tests
         [DataTestMethod]
         [DataRow("+ 2 + 2 ", "+2+2")]
         [DataRow(" 5 + 5 ", "+5+5")]
+        [DataRow("-5+-5 ", "+-5+-5")]
+        [DataRow("(-7*-7)", "+(+-7*-7)")]
         [DataRow("+4 (+4 + 4 )", "+4+(+4+4)")]
-        [DataRow("-1 (+14 + 45 )", "-1+(+14+45)")]
+        [DataRow("-1 (+14 + 45 )", "+-1+(+14+45)")]
         [DataRow("  1 (  14 + 45 )", "+1+(+14+45)")]
         [DataRow("  9 (  9 + 9 ) + 9", "+9+(+9+9)+9")]
         public void GetNormalizationExpressionString_CorrectNormalization(string str, string expectedEquation)
