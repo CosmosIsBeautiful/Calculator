@@ -37,7 +37,7 @@ namespace Calculator.Arithmetic
                     equation = GetRepairedEquation(equation, ref i, -1);
                 }
             }
-
+            
             return equation.ToString();
         }
 
@@ -78,14 +78,23 @@ namespace Calculator.Arithmetic
             int startNumber = 0;
             ArithmeticSign sign = ArithmeticSign.Sum;
             ArithmeticSign signExpression = ArithmeticSign.Sum;
+            bool isNegativeNumber = false;
 
             int inner = 0;
 
+            bool isOperation;
+            bool isStartBracket;
+            bool isEndBracket;
+
             for (int i = 0; i < str.Length; i++)
             {
-                if (ArithmeticSignHelpers.IsArithmeticSign(str[i]) || str[i].Equals('(') || str[i].Equals(')'))
+                isStartBracket = str[i].Equals('(');
+                isEndBracket = str[i].Equals(')');
+                isOperation = ( str[i].IsArithmeticSign() || isStartBracket || isEndBracket );
+
+                if (isOperation)
                 {
-                    if (str[i].Equals('('))
+                    if (isStartBracket)
                     {
                         inner++;
                         signExpression = sign;
@@ -93,20 +102,22 @@ namespace Calculator.Arithmetic
                         continue;
                     }
 
-                    if (str[i].Equals(')') && str[i - 1].Equals(')'))
+                    if (isEndBracket && str[i - 1].Equals(')'))
                     {
                         inner--;
                         continue;
                     }
 
-                    if (str[i].Equals(')'))
+                    if (isNumber || isEndBracket)
                     {
-                        isNumber = true;
-                    }
+                        if (startNumber == i)
+                        {
+                            startNumber++;
+                            isNegativeNumber = true;
+                            continue;
+                        }
 
-                    if (isNumber)
-                    {
-                        var numberTerm = CreateNumberTerm(str, i, startNumber, sign);
+                        var numberTerm = CreateNumberTerm(str, i, startNumber, sign, isNegativeNumber);
 
                         if (inner == 0)
                         {
@@ -125,7 +136,7 @@ namespace Calculator.Arithmetic
                             innerExpression.Add(numberTerm);
                         }
 
-                        if (str[i].Equals(')'))
+                        if (isEndBracket)
                         {
                             inner--;
                             i++;
@@ -137,6 +148,7 @@ namespace Calculator.Arithmetic
                     else
                     {
                         isNumber = true;
+                        isNegativeNumber = false;
                         startNumber = i + 1;
 
                         sign = ArithmeticSignHelpers.GetArithmeticSignType(str[i]);
@@ -146,7 +158,7 @@ namespace Calculator.Arithmetic
 
             if (str[str.Length - 1].Equals(')') == false)
             {
-                var lastNumberTerm = CreateNumberTerm(str, str.Length, startNumber, sign);
+                var lastNumberTerm = CreateNumberTerm(str, str.Length, startNumber, sign, isNegativeNumber);
                 expression.Add(lastNumberTerm);
             }
 
@@ -163,10 +175,15 @@ namespace Calculator.Arithmetic
             return str;
         }
 
-        private NumberTerm CreateNumberTerm(string str, int i, int startIndexNumber, ArithmeticSign sign)
+        private NumberTerm CreateNumberTerm(string str, int i, int startIndexNumber, ArithmeticSign sign, bool isNegativeNumber = false)
         {
             string stringNumber = str.Substring(startIndexNumber, i - startIndexNumber);
             int number = Int32.Parse(stringNumber);
+            
+            if (isNegativeNumber)
+            {
+                number *= -1;
+            }
 
             return new NumberTerm(number, sign);
         }

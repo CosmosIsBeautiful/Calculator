@@ -9,7 +9,7 @@ namespace Calculator.Arithmetic.Tests
     {
         private static ArithmeticFormatting Formatting { get; set; }
 
-        [AssemblyInitialize]
+        [ClassInitialize]
         public static void InitializeTests(TestContext testContext)
         {
             Formatting = new ArithmeticFormatting();
@@ -19,7 +19,15 @@ namespace Calculator.Arithmetic.Tests
         {
             Dictionary<string, List<ITerm>> expressions = new Dictionary<string, List<ITerm>>
             {
-                 { "+8+(+7/(+1+3)-5)-9",
+                { "-2*-2", new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
+                { "+5*(-2*-2)", new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
+                { "+8*-9",
+                    new List<ITerm>
+                    {   new NumberTerm('+', 8),
+                        new NumberTerm('*', -9)
+                    }
+                },
+                { "+8+(+7/(+1+3)*-5)/-9",
                     new List<ITerm>
                     {   new NumberTerm('+', 8),
                         new ExpressionTerm('+',
@@ -33,23 +41,23 @@ namespace Calculator.Arithmetic.Tests
                                         new NumberTerm('+', 3)
                                     }
                                 ),
-                                new NumberTerm('-', 5),
+                                new NumberTerm('*', -5),
                             }
                         ),
-                        new NumberTerm('-', 9)
+                        new NumberTerm('/', -9)
                     }
                 },
                 { "+2+2", new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
-                { "+2*(-4/1+(-6/2))",
+                { "+2*(-4/-1+(-6/-2))",
                     new List<ITerm>
                     {
                         new NumberTerm('+', 2), new ExpressionTerm('*',
                             new List<ITerm>
                             {
-                                new NumberTerm('-', 4) , new NumberTerm('/', 1), new ExpressionTerm('+',
+                                new NumberTerm('-', 4) , new NumberTerm('/', -1), new ExpressionTerm('+',
                                     new List<ITerm>
                                     {
-                                        new NumberTerm('-', 6),  new NumberTerm('/',2)
+                                        new NumberTerm('-', 6),  new NumberTerm('/', -2)
                                     }
                                 )
                             }
