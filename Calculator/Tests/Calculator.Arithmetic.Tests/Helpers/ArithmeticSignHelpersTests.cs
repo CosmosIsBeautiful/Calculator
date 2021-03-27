@@ -138,5 +138,21 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue}; Expected: {expectedValue}");
         }
+
+        [DataTestMethod]
+        [DataRow('-', true)]
+        [DataRow('*', false)]
+        [DataRow('/', false)]
+        [DataRow('+', false)]
+        [DataRow(')', false)]
+        [DataRow('(', false)]
+        public void IsNegativeNumber_Symbol_BooleanValue(char symbol, bool expectedValue)
+        {
+            //arrange
+            bool actualValue = ArithmeticSignHelpers.IsNegativeNumber(symbol);
+
+            //assert
+            Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue}; Expected: {expectedValue}");
+        }
     }
 }

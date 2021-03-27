@@ -24,7 +24,7 @@ namespace Calculator.Arithmetic.Helpers
             return symbol.Equals(enumElement.GetSign());
         }
 
-        public static bool IsArithmeticSign(char symbol)
+        public static bool IsArithmeticSign(this char symbol)
         {
             if (ArithmeticSign.Sub.EqualsSign(symbol)
                 || ArithmeticSign.Sum.EqualsSign(symbol)
@@ -35,6 +35,11 @@ namespace Calculator.Arithmetic.Helpers
             }
 
             return false;
+        }
+
+        public static bool IsNegativeNumber(this char symbol)
+        {
+            return ArithmeticSign.Sub.EqualsSign(symbol);
         }
 
         public static ArithmeticSign GetArithmeticSignType(char symbol)
