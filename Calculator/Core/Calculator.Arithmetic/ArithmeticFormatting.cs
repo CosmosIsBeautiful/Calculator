@@ -89,8 +89,6 @@ namespace Calculator.Arithmetic
 
         public List<ITerm> GetParsedExpression(string str)
         {
-            str = AddSignIfMissing(str);
-
             List<ITerm> expression = new List<ITerm>();
 
             bool isNumber = false;

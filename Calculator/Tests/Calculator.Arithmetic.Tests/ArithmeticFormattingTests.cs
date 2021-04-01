@@ -19,8 +19,20 @@ namespace Calculator.Arithmetic.Tests
         {
             Dictionary<string, List<ITerm>> expressions = new Dictionary<string, List<ITerm>>
             {
-                { "-2*-2", new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
-                { "+5*(-2*-2)", new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
+                { "+-2*-2", new List<ITerm> { new NumberTerm('+', -2), new NumberTerm('*', -2) } },
+                { "+5*(+-2*-2)",
+                    new List<ITerm>
+                    {
+                        new NumberTerm('+', 5),
+                        new ExpressionTerm('*',
+                            new List<ITerm>
+                            {
+                                new NumberTerm('+', -2),
+                                new NumberTerm('*', -2),
+                            }
+                        )
+                    }
+                },
                 { "+8*-9",
                     new List<ITerm>
                     {   new NumberTerm('+', 8),
@@ -48,13 +60,13 @@ namespace Calculator.Arithmetic.Tests
                     }
                 },
                 { "+2+2", new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
-                { "+2*(-4/-1+(-6/-2))",
+                { "+2*(+-4/-1+(-6/-2))",
                     new List<ITerm>
                     {
                         new NumberTerm('+', 2), new ExpressionTerm('*',
                             new List<ITerm>
                             {
-                                new NumberTerm('-', 4) , new NumberTerm('/', -1), new ExpressionTerm('+',
+                                new NumberTerm('+', -4) , new NumberTerm('/', -1), new ExpressionTerm('+',
                                     new List<ITerm>
                                     {
                                         new NumberTerm('-', 6),  new NumberTerm('/', -2)
@@ -64,25 +76,25 @@ namespace Calculator.Arithmetic.Tests
                         )
                     }
                 },
-                { "+(-5+7)*9/3",
+                { "+(+-5+7)*9/3",
                     new List<ITerm>
                     {
                         new ExpressionTerm('+',
                             new List<ITerm>
                             {
-                                new NumberTerm('-', 5), new NumberTerm('+', 7)
+                                new NumberTerm('+', -5), new NumberTerm('+', 7)
                             }
                         ),
                         new NumberTerm('*', 9), new NumberTerm('/', 3)
                     }
                 },
-                { "+(-5+(+7*9)/3",
+                { "+(+-5+(+7*9)/3",
                     new List<ITerm>
                     {
                         new ExpressionTerm('+',
                             new List<ITerm>
                             {
-                                new NumberTerm('-', 5), new ExpressionTerm('+',
+                                new NumberTerm('+', -5), new ExpressionTerm('+',
                                     new List<ITerm>
                                     {
                                         new NumberTerm('+', 7), new NumberTerm('*', 9)
@@ -125,7 +137,7 @@ namespace Calculator.Arithmetic.Tests
                         new NumberTerm('-', 9)
                     }
                 },
-                { "+(+100-(-5+(+7*9)/3)-100",
+                { "+(+100-(+-5+(+7*9)/3)-100",
                     new List<ITerm>
                     {
                         new ExpressionTerm('+',
@@ -135,7 +147,7 @@ namespace Calculator.Arithmetic.Tests
                                 new ExpressionTerm('-',
                                     new List<ITerm>
                                     {
-                                        new NumberTerm('-', 5), new ExpressionTerm('+',
+                                        new NumberTerm('+', -5), new ExpressionTerm('+',
                                             new List<ITerm>
                                             {
                                                 new NumberTerm('+', 7), new NumberTerm('*', 9)
@@ -149,10 +161,10 @@ namespace Calculator.Arithmetic.Tests
                     }
                 },
                 { "+105", new List<ITerm>  { new NumberTerm('+', 105) } },
-                { "-5+7*9/3",
+                { "+-5+7*9/3",
                     new List<ITerm>
                     {
-                        new NumberTerm('-', 5), new NumberTerm('+', 7), new NumberTerm('*', 9), new NumberTerm('/', 3)
+                        new NumberTerm('+', -5), new NumberTerm('+', 7), new NumberTerm('*', 9), new NumberTerm('/', 3)
                     }
                 },
                 //{ "50*785+578001/453+1", new List<NumberTerm>  { new NumberTerm('+', 50), new NumberTerm('*', 785), new NumberTerm('+', 578001), new NumberTerm('/', 453), new NumberTerm('+', 1) } },
