@@ -248,11 +248,14 @@ namespace Calculator.Arithmetic.Tests
         [DataRow("+ 2 + 2 ", "+2+2")]
         [DataRow(" 5 + 5 ", "+5+5")]
         [DataRow("-5+-5 ", "+-5+-5")]
+        [DataRow("-5-5 ", "+-5-5")]
         [DataRow("(-7*-7)", "+(+-7*-7)")]
-        [DataRow("+4 (+4 + 4 )", "+4+(+4+4)")]
-        [DataRow("-1 (+14 + 45 )", "+-1+(+14+45)")]
-        [DataRow("  1 (  14 + 45 )", "+1+(+14+45)")]
-        [DataRow("  9 (  9 + 9 ) + 9", "+9+(+9+9)+9")]
+        [DataRow("54/(5*2)", "+54/(+5*2)")]
+        [DataRow("+4 (+4 + 4 )", "+4*(+4+4)")]
+        [DataRow("-1 (+14 + 45 )", "+-1*(+14+45)")]
+        [DataRow("  1 (14 + 45 )", "+1*(+14+45)")]
+        [DataRow("  9 (  9 + 9 ) + 9", "+9*(+9+9)+9")]
+        [DataRow(" + 5(78,74*-8/(45-20/2)(2+5))-8", "+5*(+78,74*-8/(+45-20/2)*(+2+5))-8")]
         public void GetNormalizationExpressionString_CorrectNormalization(string str, string expectedEquation)
         {
             //arrange
@@ -260,7 +263,6 @@ namespace Calculator.Arithmetic.Tests
 
             //assert
             Assert.AreEqual(expectedEquation, actualEquation, $"Actual: {actualEquation} != Expected: {expectedEquation}");
-
         }
     }
 }

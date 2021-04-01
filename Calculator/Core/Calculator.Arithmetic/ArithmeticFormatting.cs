@@ -25,37 +25,56 @@ namespace Calculator.Arithmetic
             var withoutSpacesEquation = equationString.Replace(" ", string.Empty);
             StringBuilder equation = new StringBuilder(withoutSpacesEquation);
 
-            int index = 0;
-            equation = GetRepairedEquation(equation, ref index, 0);
+            equation = GetFixEquationFirstSign(equation);
 
             for (int i = 1; i < equation.Length; i++)
             {
                 if (equation[i].Equals('('))
                 {
-                    equation = GetRepairedEquation(equation, ref i, +1);
+                    equation = GetFixEquationBeforeBracket(equation, ref i);
 
-                    equation = GetRepairedEquation(equation, ref i, -1);
+                    equation = GetFixEquationAfterBracket(equation, ref i);
                 }
             }
             
             return equation.ToString();
         }
 
-        private StringBuilder GetRepairedEquation(StringBuilder equation, ref int i, int step)
+        private static StringBuilder GetFixEquationFirstSign(StringBuilder equation)
         {
-            int index = i + step;
-            if (equation[index].IsArithmeticSign() == false)
+            if (equation[0].IsArithmeticSign() == false || equation[0].IsNegativeNumber())
             {
-                i--;
-                return equation.Insert(index, '+');
-            }
-            else if (equation[index].IsNegativeNumber())
-            {
-                i--;
-                return equation.Insert(index, '+');
+                return equation.Insert(0, '+');
             }
 
             return equation;
+        }
+
+        private static StringBuilder GetFixEquationBeforeBracket(StringBuilder equation, ref int i)
+        {
+            StringBuilder fixEquation = equation;
+            if (equation[i - 1].IsArithmeticSign() == false)
+            {
+                fixEquation = equation.Insert(i, '*');
+                i++;
+                return fixEquation;
+            }
+
+            return fixEquation;
+        }
+
+        private static StringBuilder GetFixEquationAfterBracket(StringBuilder equation, ref int i)
+        {
+            StringBuilder fixEquation = equation;
+
+            if (equation[i + 1].IsArithmeticSign() == false || equation[i + 1].IsNegativeNumber())
+            {
+                fixEquation = equation.Insert(i + 1, '+');
+                i++;
+                return fixEquation;
+            }
+
+            return fixEquation;
         }
 
         public bool IsValidExpression(string equation)
