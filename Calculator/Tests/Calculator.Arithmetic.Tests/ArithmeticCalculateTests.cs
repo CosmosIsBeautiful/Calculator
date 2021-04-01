@@ -37,7 +37,7 @@ namespace Calculator.Arithmetic.Tests
                         new NumberTerm('-', 1),
                     }
                 },
-                { new NumberTerm('+', -78.8), new List<ITerm>
+                { new NumberTerm('+', -78.8M), new List<ITerm>
                     {
                         new NumberTerm('+', -12),
                         new NumberTerm('-', 4),
@@ -48,7 +48,7 @@ namespace Calculator.Arithmetic.Tests
                         new NumberTerm('*', 2),
                     }
                 },
-                { new NumberTerm('+', 29.6), new List<ITerm>
+                { new NumberTerm('+', 29.6M), new List<ITerm>
                     {
                    
                         new NumberTerm('+', 74),

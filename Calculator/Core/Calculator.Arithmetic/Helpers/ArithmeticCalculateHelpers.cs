@@ -7,7 +7,7 @@ namespace Calculator.Arithmetic.Helpers
     {
         public static NumberTerm MakeOperation(this NumberTerm firstNumber, NumberTerm secondNumber)
         {
-            double result = 0;
+            decimal result = 0;
             switch (secondNumber.Sign)
             {
                 case ArithmeticSign.Mul:

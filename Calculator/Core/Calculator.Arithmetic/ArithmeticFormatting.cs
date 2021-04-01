@@ -204,7 +204,7 @@ namespace Calculator.Arithmetic
                 number *= -1;
             }
 
-            return new NumberTerm(number, sign);
+            return new NumberTerm(sign, number);
         }
 
         private ExpressionTerm GetOrCreateFirstInnerExpression(List<ITerm> expression, ArithmeticSign signExpression)

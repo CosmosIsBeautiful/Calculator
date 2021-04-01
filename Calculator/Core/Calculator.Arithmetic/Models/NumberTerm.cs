@@ -8,23 +8,18 @@ namespace Calculator.Arithmetic.Models
     {
         public ArithmeticSign Sign { get; set; }
 
-        public double Digit { get; set; }
+        public decimal Digit { get; set; }
 
-        public NumberTerm(ArithmeticSign sign, double digit)
+        public NumberTerm(char sign, decimal digit)
         {
-            this.Sign = sign;
-            this.Digit = digit;
-        }
-
-        public NumberTerm(int digit, ArithmeticSign sign)
-        {
-            this.Digit = digit;
-            this.Sign = sign;
-        }
-        public NumberTerm(char sign, double digit)
-        {
-            this.Digit = digit;
             this.Sign = ArithmeticSignHelpers.GetArithmeticSignType(sign);
+            this.Digit = digit;
+        }
+
+        public NumberTerm(ArithmeticSign sign, decimal digit)
+        {
+            this.Sign = sign;
+            this.Digit = digit;
         }
 
         public bool Equals(NumberTerm otherNumber)
