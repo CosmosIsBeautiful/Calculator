@@ -1,7 +1,6 @@
 ﻿using Calculator.Arithmetic.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Calculator.Arithmetic.Tests
 {
@@ -16,23 +15,9 @@ namespace Calculator.Arithmetic.Tests
             Calculate = new ArithmeticCalculate();
         }
 
-
+        #region CalculateInnerExpression
         [TestMethod]
-        public void GetCalculate()
-        {
-            Dictionary<decimal, List<ITerm>> expressions = CreateExpressionDictionary();
-
-            foreach (var item in expressions)
-            {
-                //arrange
-                var actual = Calculate.Calculate(item.Value);
-
-                Assert.AreEqual(item.Key, actual, $" Actual: {actual} ! = Expression: {item.Key}");
-            }
-        }
-
-        [TestMethod]
-        public void CalculateInnerExpression()
+        public void CalculateInnerExpression_CorrectSolve()
         {
             Dictionary<NumberTerm, List<ITerm>> expressions = new Dictionary<NumberTerm, List<ITerm>>
             {
@@ -90,11 +75,29 @@ namespace Calculator.Arithmetic.Tests
                 Assert.AreEqual(item.Key, actual, $" Actual: {actual.Sign} {actual.Digit} ! = Expression: {item.Key.Sign} {item.Key.Digit}");
             }
         }
+        #endregion
 
-        public Dictionary<decimal, List<ITerm>> CreateExpressionDictionary()
+        #region Calculate
+        [TestMethod]
+        public void Calculate_CorrectSolve()
+        {
+            Dictionary<decimal, List<ITerm>> expressions = CreateAnswerAndExpressionDictionary();
+
+            foreach (var item in expressions)
+            {
+                //arrange
+                var actualSolved = Calculate.Calculate(item.Value);
+
+                //assert
+                Assert.AreEqual(item.Key, actualSolved, $"Expert solved: {expressions.Keys} != Actual solved {actualSolved}");
+            }
+        }
+
+        private Dictionary<decimal, List<ITerm>> CreateAnswerAndExpressionDictionary()
         {
             Dictionary<decimal, List<ITerm>> expressions = new Dictionary<decimal, List<ITerm>>
             {
+                //+2+2
                 { 4, new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
                 //-118*(7+15+(9*(4*3))*6*(7-2))/42
                 { -96229,
@@ -317,5 +320,6 @@ namespace Calculator.Arithmetic.Tests
 
             return expressions;
         }
+        #endregion
     }
 }

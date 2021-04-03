@@ -15,7 +15,23 @@ namespace Calculator.Arithmetic.Tests
             Formatting = new ArithmeticFormatting();
         }
 
-        public Dictionary<string, List<ITerm>> CreateExpressionDictionary()
+        #region GetParsedExpression
+        [TestMethod]
+        public void GetParsedExpression_CorrectlyParsingExpression()
+        {
+            //act
+            Dictionary<string, List<ITerm>> expressions = CreateStringAndExpressionDictionary();
+
+            foreach (var item in expressions)
+            {
+                //arrange
+                var actual = Formatting.GetParsedExpression(item.Key);
+
+                Assert.IsTrue(this.AreEqual(item.Value, actual, item.Key));
+            }
+        }
+
+        private Dictionary<string, List<ITerm>> CreateStringAndExpressionDictionary()
         {
             Dictionary<string, List<ITerm>> expressions = new Dictionary<string, List<ITerm>>
             {
@@ -167,26 +183,9 @@ namespace Calculator.Arithmetic.Tests
                         new NumberTerm('+', -5), new NumberTerm('+', 7), new NumberTerm('*', 9), new NumberTerm('/', 3)
                     }
                 },
-                //{ "50*785+578001/453+1", new List<NumberTerm>  { new NumberTerm('+', 50), new NumberTerm('*', 785), new NumberTerm('+', 578001), new NumberTerm('/', 453), new NumberTerm('+', 1) } },
-                //{ "-54/87+78*15", new List<NumberTerm>  { new NumberTerm('-', 54), new NumberTerm('/', 87), new NumberTerm('+', 78), new NumberTerm('*', 15) } }
             };
 
             return expressions;
-        }
-
-        [TestMethod]
-        public void GetParsedExpression_CorrectlyParsingExpression()
-        {
-            //act
-            Dictionary<string, List<ITerm>> expressions = CreateExpressionDictionary();
-
-            foreach (var item in expressions)
-            {
-                //arrange
-                var actual = Formatting.GetParsedExpression(item.Key);
-
-                Assert.IsTrue(this.AreEqual(item.Value, actual, item.Key));
-            }
         }
 
         private bool AreEqual(IList<ITerm> data, IList<ITerm> actual, string expression)
@@ -207,7 +206,9 @@ namespace Calculator.Arithmetic.Tests
 
             return flag;
         }
+        #endregion
 
+        #region IsValidExpression
         [DataTestMethod]
         [DataRow("+2+2", true)]
         [DataRow("+33/-5", true)]
@@ -255,7 +256,9 @@ namespace Calculator.Arithmetic.Tests
             //assert
             Assert.AreEqual(isValidExpected, isValidActual, $"Expression: {str}. Actual: {isValidActual} != Expected: {isValidExpected}");
         }
+        #endregion
 
+        #region GetNormalizationExpressionString
         [DataTestMethod]
         [DataRow("+ 2 + 2 ", "+2+2")]
         [DataRow(" 5 + 5 ", "+5+5")]
@@ -276,5 +279,6 @@ namespace Calculator.Arithmetic.Tests
             //assert
             Assert.AreEqual(expectedEquation, actualEquation, $"Actual: {actualEquation} != Expected: {expectedEquation}");
         }
+        #endregion
     }
 }
