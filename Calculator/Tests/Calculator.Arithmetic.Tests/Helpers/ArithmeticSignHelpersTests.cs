@@ -8,6 +8,7 @@ namespace Calculator.Arithmetic.Tests.Helpers
     [TestClass]
     public class ArithmeticSignHelpersTests
     {
+        #region GetSign
         [DataTestMethod]
         [DataRow(ArithmeticSign.Mul, '*')]
         [DataRow(ArithmeticSign.Del, '/')]
@@ -21,13 +22,15 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             Assert.AreEqual(expectedSign, actualSign, $"Actual: {actualSign} != Expected: {expectedSign}");
         }
+        #endregion
 
+        #region GetPriority
         [DataTestMethod]
         [DataRow(ArithmeticSign.Mul, ArithmeticSign.Sum)]
         [DataRow(ArithmeticSign.Mul, ArithmeticSign.Sub)]
         [DataRow(ArithmeticSign.Del, ArithmeticSign.Sum)]
         [DataRow(ArithmeticSign.Del, ArithmeticSign.Sub)]
-        public void GetPriority_CorrectSeniorityPrioriry(ArithmeticSign signHigherPriority, ArithmeticSign signLoverPriority)
+        public void GetPriority_CorrectSeniorityPriority(ArithmeticSign signHigherPriority, ArithmeticSign signLoverPriority)
         {
             //arrange
             int actualHigherPriority = signHigherPriority.GetPriority();
@@ -40,7 +43,7 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataTestMethod]
         [DataRow(ArithmeticSign.Mul, ArithmeticSign.Del)]
         [DataRow(ArithmeticSign.Sum, ArithmeticSign.Sub)]
-        public void GetPriority_CorrectEqualiryPrioriry(ArithmeticSign signPriority, ArithmeticSign signPriorityOther)
+        public void GetPriority_CorrectEqualityPriority(ArithmeticSign signPriority, ArithmeticSign signPriorityOther)
         {
             //arrange
             int actualPriority = signPriority.GetPriority();
@@ -55,7 +58,7 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(ArithmeticSign.Sum, ArithmeticSign.Del)]
         [DataRow(ArithmeticSign.Sub, ArithmeticSign.Mul)]
         [DataRow(ArithmeticSign.Sub, ArithmeticSign.Del)]
-        public void GetPriority_CorrectJuniorPrioriry(ArithmeticSign signLoverPriority, ArithmeticSign signHigherPriority)
+        public void GetPriority_CorrectJuniorPriority(ArithmeticSign signLoverPriority, ArithmeticSign signHigherPriority)
         {
             //arrange
             int actualLoverPriority = signLoverPriority.GetPriority();
@@ -64,7 +67,9 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             Assert.IsTrue(actualLoverPriority < actualHigherPriority, $"Sign priority: {signLoverPriority} < {actualHigherPriority}");
         }
+        #endregion
 
+        #region EqualsSign
         [DataTestMethod]
         [DataRow(ArithmeticSign.Mul, '*', true)]
         [DataRow(ArithmeticSign.Del, '/', true)]
@@ -81,7 +86,9 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue} != Expected: {expectedValue}; DataRow: {sign} != {symbolSign}");
         }
+        #endregion
 
+        #region GetArithmeticSignType
         [DataTestMethod]
         [DataRow('*', ArithmeticSign.Mul)]
         [DataRow('/', ArithmeticSign.Del)]
@@ -117,7 +124,9 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             //Throw ArgumentException
         }
+        #endregion
 
+        #region IsArithmeticSign
         [DataTestMethod]
         [DataRow('*', true)]
         [DataRow('/', true)]
@@ -138,7 +147,9 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue}; Expected: {expectedValue}");
         }
+        #endregion
 
+        #region IsNegativeNumber
         [DataTestMethod]
         [DataRow('-', true)]
         [DataRow('*', false)]
@@ -154,5 +165,6 @@ namespace Calculator.Arithmetic.Tests.Helpers
             //assert
             Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue}; Expected: {expectedValue}");
         }
+        #endregion
     }
 }
