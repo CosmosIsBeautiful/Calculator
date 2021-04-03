@@ -1,25 +1,101 @@
 ﻿using Calculator.Arithmetic.Helpers;
 using Calculator.Arithmetic.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Calculator.Arithmetic.Enums;
 
 namespace Calculator.Arithmetic
 {
     public interface IArithmeticCalculate
     {
-        double Calculate(IList<ITerm> expression);
+        decimal Calculate(IList<ITerm> expression);
 
-        NumberTerm CalculateInnerExpression(IList<ITerm> expression);
+        NumberTerm CalculateInnerExpression(IList<ITerm> expression, ArithmeticSign? signExpression = null);
     }
 
     public class ArithmeticCalculate : IArithmeticCalculate
     {
-
-        public double Calculate(IList<ITerm> expression)
+        public decimal Calculate(IList<ITerm> expression)
         {
-            throw new NotImplementedException();
+            List<NestedExpression> nestedExpressions = CreateNestedExpressions(expression);
+
+            while (nestedExpressions.Count != 1)  
+            {
+                int i = nestedExpressions.Count - 1;
+
+                var signExpression = nestedExpressions[i].Sign;
+                var innerExpressions = nestedExpressions[i].Expression;
+
+                var calculateInnerExpression = CalculateInnerExpression(innerExpressions, signExpression);
+                nestedExpressions = GetReplacedCalculatedNestedExpressions(nestedExpressions, i, calculateInnerExpression);
+
+                nestedExpressions = CheckLastExpressionsOnNestedExpressions(nestedExpressions);
+            }
+
+            var resultExpression = CalculateInnerExpression(nestedExpressions[0].Expression);
+            return resultExpression.Digit;
+        }
+
+        private List<NestedExpression> GetReplacedCalculatedNestedExpressions(List<NestedExpression> nestedExpressions, int i, NumberTerm calculateInnerExpression)
+        {
+            int innerIndex = nestedExpressions[i].Index;
+
+            nestedExpressions[i - 1].Expression[innerIndex] = calculateInnerExpression;
+            nestedExpressions.RemoveAt(i);
+
+            return nestedExpressions;
+        }
+
+        private List<NestedExpression> CreateNestedExpressions(IList<ITerm> expression)
+        {
+            var index = -1;
+            IList<ITerm> innerExpression = expression.ToList();
+
+            var nestedExpressions = new List<NestedExpression>
+            {
+                new NestedExpression(index, innerExpression)
+            };
+
+            do
+            {
+                index = GetExpressionTermPositionNumber(innerExpression);
+                if (index >= 0)
+                {
+                    var foundInnerExpression = (ExpressionTerm)innerExpression[index];
+                    var innerSign = foundInnerExpression.Sign;
+                    innerExpression = foundInnerExpression.Expression;
+
+                    nestedExpressions.Add(new NestedExpression(index, innerExpression, innerSign));
+                }
+            } while (index >= 0);
+
+            return nestedExpressions;
+        }
+
+        private List<NestedExpression> CheckLastExpressionsOnNestedExpressions(List<NestedExpression> nestedExpressions)
+        {
+            int index = nestedExpressions.Count - 1;
+            var innerExpression = nestedExpressions[index].Expression;
+
+            do
+            {
+                index = GetExpressionTermPositionNumber(innerExpression);
+                if (index >= 0)
+                {
+                    var foundInnerExpression = innerExpression[index] as ExpressionTerm;
+                    var innerSign = foundInnerExpression.Sign;
+                    innerExpression = foundInnerExpression.Expression;
+
+                    nestedExpressions.Add(new NestedExpression(index, innerExpression, innerSign));
+                }
+
+            } while (index >= 0);
+          
+
+            return nestedExpressions;
         }
 
         private int GetExpressionTermPositionNumber(IList<ITerm> expression)
@@ -32,7 +108,7 @@ namespace Calculator.Arithmetic
                 }
             }
 
-            return 0;
+            return -1;
         }
 
         private IList<ITerm> GetInnerExpression(IList<ITerm> expression)
@@ -51,7 +127,7 @@ namespace Calculator.Arithmetic
             return innerExpression;
         }
 
-        public NumberTerm CalculateInnerExpression(IList<ITerm> expression)
+        public NumberTerm CalculateInnerExpression(IList<ITerm> expression, ArithmeticSign? signExpression = null)
         {
             var numbers = expression.Cast<NumberTerm>().ToList();
 
@@ -62,7 +138,12 @@ namespace Calculator.Arithmetic
                 numbers[index - 1] = numbers[index - 1].MakeOperation(numbers[index]);
                 numbers.RemoveAt(index);
             }
-            
+
+            if (signExpression != null)
+            {
+                numbers[0].Sign = signExpression.Value;
+            }
+
             return numbers[0];
         }
 
