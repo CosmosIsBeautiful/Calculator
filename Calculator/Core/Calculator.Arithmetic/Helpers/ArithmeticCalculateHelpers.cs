@@ -26,5 +26,15 @@ namespace Calculator.Arithmetic.Helpers
 
             return new NumberTerm(firstNumber.Sign, result);
         }
+
+        public static bool IsStartBracket(this char symbol)
+        {
+            return symbol.Equals('(');
+        }
+
+        public static bool IsEndBracket(this char symbol)
+        {
+            return symbol.Equals(')');
+        }
     }
 }

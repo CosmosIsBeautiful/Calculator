@@ -36,5 +36,37 @@ namespace Calculator.Arithmetic.Tests.Helpers
             yield return new object[] { new NumberTerm('+', 168.856M), new NumberTerm('*', 4.4M), new NumberTerm('+', 742.9664M) };
         }
         #endregion
+
+        #region IsBracket
+        [DataTestMethod]
+        [DataRow('(', true)]
+        [DataRow(')', false)]
+        [DataRow('{', false)]
+        [DataRow('<', false)]
+        [DataRow('[', false)]
+        public void IsStartBracket_CorrectValue(char symbol, bool expectedValue)
+        {
+            //arrange
+            bool actualValue = symbol.IsStartBracket();
+
+            //assert
+            Assert.AreEqual(expectedValue, actualValue, $"Symbol: {symbol}; Actual: {actualValue} != Expected: {expectedValue}");
+        }
+
+        [DataTestMethod]
+        [DataRow(')', true)]
+        [DataRow('(', false)]
+        [DataRow('}', false)]
+        [DataRow('>', false)]
+        [DataRow(']', false)]
+        public void IsEndBracket_CorrectValue(char symbol, bool expectedValue)
+        {
+            //arrange
+            bool actualValue = symbol.IsEndBracket();
+
+            //assert
+            Assert.AreEqual(expectedValue, actualValue, $"Symbol: {symbol}; Actual: {actualValue} != Expected: {expectedValue}");
+        }
+        #endregion
     }
 }
