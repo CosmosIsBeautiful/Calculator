@@ -50,5 +50,10 @@ namespace Calculator.Arithmetic.Models
         {
             return this.Digit.GetHashCode() ^ this.Sign.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return $"{Sign.GetSign()}{Digit}";
+        }
     }
 }
