@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace Calculator.Arithmetic
 {
-    public interface IArithmeticCalculate
+    public interface ICalculate
     {
         decimal Calculate(IList<ITerm> expression);
 
         NumberTerm CalculateInnerExpression(IList<ITerm> expression, ArithmeticSign? signExpression = null);
     }
 
-    public class ArithmeticCalculate : IArithmeticCalculate
+    public class ArithmeticCalculate : ICalculate
     {
         #region Calculate
         public decimal Calculate(IList<ITerm> expression)

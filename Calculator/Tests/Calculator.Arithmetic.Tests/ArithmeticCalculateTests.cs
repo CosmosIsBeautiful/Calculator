@@ -7,7 +7,7 @@ namespace Calculator.Arithmetic.Tests
     [TestClass]
     public class ArithmeticCalculateTests
     {
-        private static IArithmeticCalculate Calculate { get; set; }
+        private static ICalculate Calculate { get; set; }
 
         [ClassInitialize]
         public static void InitializeTests(TestContext testContext)
@@ -99,7 +99,7 @@ namespace Calculator.Arithmetic.Tests
             {
                 //+2+2
                 { 4, new List<ITerm> { new NumberTerm('+', 2), new NumberTerm('+', 2) } },
-                //-118*(7+15+(9*(4*3))*6*(7-2))/42
+                //-118*(7+15+(9*(4*3))*6*(7-2))/4
                 { -96229,
                     new List<ITerm>
                     {   new NumberTerm('+', -118),
