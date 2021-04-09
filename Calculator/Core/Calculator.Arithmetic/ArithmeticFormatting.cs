@@ -124,6 +124,7 @@ namespace Calculator.Arithmetic
             var signExpression = ArithmeticSign.Sum;
 
             int nestedExpressionCount = 0;
+            bool isNewNestedExpression = false;
 
             for (int i = 0; i < str.Length; i++)
             {
@@ -144,6 +145,10 @@ namespace Calculator.Arithmetic
                     if (isEndBracket && str[i - 1].IsEndBracket())
                     {
                         nestedExpressionCount--;
+                        if (nestedExpressionCount == 0)
+                        {
+                            isNewNestedExpression = true;
+                        }
                         continue;
                     }
 
@@ -164,18 +169,25 @@ namespace Calculator.Arithmetic
                         }
                         else if (nestedExpressionCount == 1)
                         {
-                            ExpressionTerm innerExpression = GetOrCreateFirstInnerExpression(expression, signExpression);
+                            ExpressionTerm innerExpression = GetOrCreateFirstInnerExpression(expression, signExpression, isNewNestedExpression);
                             innerExpression.Expression.Add(numberTerm);
+                            isNewNestedExpression = false;
                         }
                         else if (nestedExpressionCount > 1)
                         {
                             IList<ITerm> innerExpression = GetOrCreateSubsequentInnerExpression(expression, nestedExpressionCount, signExpression);
                             innerExpression.Add(numberTerm);
+                            isNewNestedExpression = false;
                         }
 
                         if (isEndBracket)
                         {
                             nestedExpressionCount--;
+                            if (nestedExpressionCount == 0)
+                            {
+                                isNewNestedExpression = true;
+                            }
+
                             i++;
                         }
 
@@ -215,10 +227,10 @@ namespace Calculator.Arithmetic
             return new NumberTerm(sign, number);
         }
 
-        private static ExpressionTerm GetOrCreateFirstInnerExpression(List<ITerm> expression, ArithmeticSign signExpression)
+        private static ExpressionTerm GetOrCreateFirstInnerExpression(List<ITerm> expression, ArithmeticSign signExpression, bool isNewNestedExpression)
         {
             ExpressionTerm innerExpression;
-            if (expression?.Any() == true && expression.Last() is ExpressionTerm expressionLast)
+            if (expression?.Any() == true && expression.Last() is ExpressionTerm expressionLast && isNewNestedExpression == false)
             {
                 innerExpression = expressionLast;
             }

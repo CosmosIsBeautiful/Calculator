@@ -27,17 +27,17 @@ namespace Calculator.Arithmetic.Tests
         private static IEnumerable<object[]> GetDataForGetParsedExpressionTest()
         {
             yield return new object[]
-            { 
+            {
                 "+-2*-2",
                 new List<ITerm> { new NumberTerm('+', -2), new NumberTerm('*', -2) }
             };
             yield return new object[]
-            { 
+            {
                 "+2+2",
                 new List<ITerm> {new NumberTerm('+', 2), new NumberTerm('+', 2)}
             };
             yield return new object[]
-            { 
+            {
                 "+5*(+-2*-2)",
                 new List<ITerm>
                 {
@@ -52,7 +52,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+8*-9",
                 new List<ITerm>
                 {   new NumberTerm('+', 8),
@@ -60,7 +60,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+8+(+7/(+1+3)*-5)/-9",
                 new List<ITerm>
                 {   new NumberTerm('+', 8),
@@ -82,7 +82,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+2*(+-4/-1+(-6/-2))",
                 new List<ITerm>
                 {
@@ -100,7 +100,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+(+-5+7)*9/3",
                 new List<ITerm>
                 {
@@ -114,7 +114,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+(+-5+(+7*9)/3",
                 new List<ITerm>
                 {
@@ -133,7 +133,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+8+(+2/1)-9",
                 new List<ITerm>
                 {   new NumberTerm('+', 8),
@@ -148,7 +148,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+8+(+7/(+1+3))-9",
                 new List<ITerm>
                 {   new NumberTerm('+', 8),
@@ -169,7 +169,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+(+100-(+-5+(+7*9)/3)-100",
                 new List<ITerm>
                 {
@@ -194,7 +194,7 @@ namespace Calculator.Arithmetic.Tests
                 }
             };
             yield return new object[]
-            { 
+            {
                 "+105",
                 new List<ITerm>  { new NumberTerm('+', 105) }
             };
@@ -204,6 +204,56 @@ namespace Calculator.Arithmetic.Tests
                 new List<ITerm>
                 {
                     new NumberTerm('+', -5), new NumberTerm('+', 7), new NumberTerm('*', 9), new NumberTerm('/', 3)
+                }
+            };
+            yield return new object[]
+            {
+                "+(+2-1)*(+9/8)",
+                new List<ITerm>
+                {
+                    new ExpressionTerm('+',
+                        new List<ITerm>
+                        {
+                            new NumberTerm('+', 2),
+                            new NumberTerm('-', 1),
+                        }
+                    ),
+                    new ExpressionTerm('*',
+                        new List<ITerm>
+                        {
+                            new NumberTerm('+', 9),
+                            new NumberTerm('/', 8),
+                        }
+                    )
+                }
+            };
+            yield return new object[]
+            {
+                "+25*(+15+(+2+1))+(+9/10)-4",
+                new List<ITerm>
+                {
+                    new NumberTerm('+', 25),
+                    new ExpressionTerm('*',
+                        new List<ITerm>
+                        {
+                            new NumberTerm('+', 15),
+                            new ExpressionTerm('+',
+                                new List<ITerm>
+                                {
+                                    new NumberTerm('+', 2),
+                                    new NumberTerm('+', 1)
+                                }
+                            ),
+                        }
+                    ),
+                    new ExpressionTerm('+',
+                        new List<ITerm>
+                        {
+                            new NumberTerm('+', 9),
+                            new NumberTerm('/', 10)
+                        }
+                    ),
+                    new NumberTerm('-', 4),
                 }
             };
         }
