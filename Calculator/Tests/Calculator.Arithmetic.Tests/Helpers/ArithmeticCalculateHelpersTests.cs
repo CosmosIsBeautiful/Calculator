@@ -12,12 +12,10 @@ namespace Calculator.Arithmetic.Tests.Helpers
         #region MakeOperation
         [DataTestMethod]
         [DynamicData(nameof(GetDataForMakeOperationTest), DynamicDataSourceType.Method)]
-        public void MakeOperation_CorrectCalculatedValue(NumberTerm firstNumber, NumberTerm secondNumber, NumberTerm expectedResult)
+        public void MakeOperationTest_CorrectCalculate(NumberTerm firstNumber, NumberTerm secondNumber, NumberTerm expectedResult)
         {
-            //arrange
             NumberTerm actualResult = firstNumber.MakeOperation(secondNumber);
 
-            //assert
             Assert.AreEqual(expectedResult, actualResult, $"Operation: {firstNumber}{secondNumber};");
         }
 
@@ -46,10 +44,8 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow('[', false)]
         public void IsStartBracket_CorrectValue(char symbol, bool expectedValue)
         {
-            //arrange
             bool actualValue = symbol.IsStartBracket();
 
-            //assert
             Assert.AreEqual(expectedValue, actualValue, $"Symbol: {symbol}; Actual: {actualValue} != Expected: {expectedValue}");
         }
 
@@ -61,10 +57,8 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(']', false)]
         public void IsEndBracket_CorrectValue(char symbol, bool expectedValue)
         {
-            //arrange
             bool actualValue = symbol.IsEndBracket();
 
-            //assert
             Assert.AreEqual(expectedValue, actualValue, $"Symbol: {symbol}; Actual: {actualValue} != Expected: {expectedValue}");
         }
         #endregion

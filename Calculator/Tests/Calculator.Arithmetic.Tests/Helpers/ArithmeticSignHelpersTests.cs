@@ -14,13 +14,11 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(ArithmeticSign.Del, '/')]
         [DataRow(ArithmeticSign.Sum, '+')]
         [DataRow(ArithmeticSign.Sub, '-')]
-        public void GetSign_CorrectSign(ArithmeticSign sign, char expectedSign)
+        public void GetSignTest_CorrectSign(ArithmeticSign sign, char expectedSign)
         {
-            //arrange
             char actualSign = sign.GetSign();
 
-            //assert
-            Assert.AreEqual(expectedSign, actualSign, $"Actual: {actualSign} != Expected: {expectedSign}");
+            Assert.AreEqual(expectedSign, actualSign, $"Invalid sign received: {expectedSign}");
         }
         #endregion
 
@@ -30,26 +28,22 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(ArithmeticSign.Mul, ArithmeticSign.Sub)]
         [DataRow(ArithmeticSign.Del, ArithmeticSign.Sum)]
         [DataRow(ArithmeticSign.Del, ArithmeticSign.Sub)]
-        public void GetPriority_CorrectSeniorityPriority(ArithmeticSign signHigherPriority, ArithmeticSign signLoverPriority)
+        public void GetPriorityTest_CorrectSeniorityPriority(ArithmeticSign signHigherPriority, ArithmeticSign signLoverPriority)
         {
-            //arrange
             int actualHigherPriority = signHigherPriority.GetPriority();
             int actualLoverPriority = signLoverPriority.GetPriority();
 
-            //assert
             Assert.IsTrue(actualHigherPriority > actualLoverPriority, $"Sign priority: {signHigherPriority} > {signLoverPriority}");
         }
 
         [DataTestMethod]
         [DataRow(ArithmeticSign.Mul, ArithmeticSign.Del)]
         [DataRow(ArithmeticSign.Sum, ArithmeticSign.Sub)]
-        public void GetPriority_CorrectEqualityPriority(ArithmeticSign signPriority, ArithmeticSign signPriorityOther)
+        public void GetPriorityTest_CorrectEqualityPriority(ArithmeticSign signPriority, ArithmeticSign signPriorityOther)
         {
-            //arrange
             int actualPriority = signPriority.GetPriority();
             int actualPriorityOther = signPriorityOther.GetPriority();
 
-            //assert
             Assert.IsTrue(actualPriority == actualPriorityOther, $"Sign priority: {signPriority} == {signPriorityOther}");
         }
 
@@ -58,13 +52,11 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(ArithmeticSign.Sum, ArithmeticSign.Del)]
         [DataRow(ArithmeticSign.Sub, ArithmeticSign.Mul)]
         [DataRow(ArithmeticSign.Sub, ArithmeticSign.Del)]
-        public void GetPriority_CorrectJuniorPriority(ArithmeticSign signLoverPriority, ArithmeticSign signHigherPriority)
+        public void GetPriorityTest_CorrectJuniorPriority(ArithmeticSign signLoverPriority, ArithmeticSign signHigherPriority)
         {
-            //arrange
             int actualLoverPriority = signLoverPriority.GetPriority();
             int actualHigherPriority = signHigherPriority.GetPriority();
-
-            //assert
+            
             Assert.IsTrue(actualLoverPriority < actualHigherPriority, $"Sign priority: {signLoverPriority} < {actualHigherPriority}");
         }
         #endregion
@@ -78,13 +70,11 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(ArithmeticSign.Sum, '*', false)]
         [DataRow(ArithmeticSign.Sum, '5', false)]
         [DataRow(ArithmeticSign.Mul, '.', false)]
-        public void EqualsSign_CorrectValue(ArithmeticSign sign, char symbolSign, bool expectedValue)
+        public void EqualsSignTest_CorrectValue(ArithmeticSign sign, char symbolSign, bool expectedValue)
         {
-            //arrange
             bool actualValue = sign.EqualsSign(symbolSign);
 
-            //assert
-            Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue} != Expected: {expectedValue}; DataRow: {sign} != {symbolSign}");
+            Assert.AreEqual(expectedValue, actualValue, $"Sign {sign} != {symbolSign}");
         }
         #endregion
 
@@ -94,13 +84,11 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow('/', ArithmeticSign.Del)]
         [DataRow('+', ArithmeticSign.Sum)]
         [DataRow('-', ArithmeticSign.Sub)]
-        public void GetArithmeticSignType_CorrectArithmeticSign(char symbolSign, ArithmeticSign expectedSign)
+        public void GetArithmeticSignTypeTest_CorrectArithmeticSign(char symbolSign, ArithmeticSign expectedSign)
         {
-            //arrange
             var actualSign = ArithmeticSignHelpers.GetArithmeticSignType(symbolSign);
 
-            //assert
-            Assert.AreEqual(expectedSign, actualSign, $"Actual: {actualSign} != Expected: {expectedSign}");
+            Assert.AreEqual(expectedSign, actualSign, $"Sign: {actualSign} != {expectedSign}");
         }
 
         [DataTestMethod]
@@ -116,13 +104,12 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow(')')]
         [DataRow('?')]
         [ExpectedException(typeof(ArgumentException))]
-        public void GetArithmeticSignType_Symbol_ThrowException(char symbol)
+        public void GetArithmeticSignTypeTest_IncorrectSymbol_ThrowException(char symbol)
         {
-            //arrange
             ArithmeticSignHelpers.GetArithmeticSignType(symbol);
 
             //assert
-            //Throw ArgumentException
+            //throw ArgumentException
         }
         #endregion
 
@@ -139,13 +126,11 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow('=', false)]
         [DataRow('q', false)]
         [DataRow('!', false)]
-        public void IsArithmeticSign_Symbol_BooleanValue(char symbol, bool expectedValue)
+        public void IsArithmeticSignTest_CorrectSymbol(char symbol, bool expectedValue)
         {
-            //arrange
             bool actualValue = ArithmeticSignHelpers.IsArithmeticSign(symbol);
 
-            //assert
-            Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue}; Expected: {expectedValue}");
+            Assert.AreEqual(expectedValue, actualValue, $"Incorrectly recognized symbol: {symbol}");
         }
         #endregion
 
@@ -157,13 +142,11 @@ namespace Calculator.Arithmetic.Tests.Helpers
         [DataRow('+', false)]
         [DataRow(')', false)]
         [DataRow('(', false)]
-        public void IsNegativeNumber_Symbol_BooleanValue(char symbol, bool expectedValue)
+        public void IsNegativeNumberTest_CorrectSymbol(char symbol, bool expectedValue)
         {
-            //arrange
             bool actualValue = ArithmeticSignHelpers.IsNegativeNumber(symbol);
 
-            //assert
-            Assert.AreEqual(expectedValue, actualValue, $"Actual: {actualValue}; Expected: {expectedValue}");
+            Assert.AreEqual(expectedValue, actualValue, $"Incorrectly recognized symbol: {symbol}");
         }
         #endregion
     }
